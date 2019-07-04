@@ -3,6 +3,14 @@
 %import common.FLOAT
 %import common.NUMBER
 
+COMMENT : /\/\/.+?\n/
+
+%ignore COMMENT
+
+%import common.WS
+
+%ignore WS
+
 word : CNAME
 str : ESCAPED_STRING
 
@@ -16,31 +24,49 @@ raw_expression : str | ("0" ("x" | "b") ?) ? NUMBER | FLOAT
 
 // Compound Expressions
 // TODO: allow expressions?
-set_expression : word ("<" (atom_set ",")* atom_set (",")? ">")?
+set_expression : (word ("<" (atom_set ",")* atom_set (",")? ">")? ("^" NUMBER)? ("x" set_expression)?) | "#" "(" set_expression ")"
 
 set_declaration : ()
 
-function_declaration : ()
+function_declaration : ((("declare" word) | "λ") ":" set_mapping_specifier "[" (word ",")* word? "]" "->" function_body)
+
+set_mapping_specifier : ("(" set_expression "->" set_expression ")")
+
+function_body : expression | ("{" phrase* "}")
 
 typedef : "typedef" set_expression "is" set_expression
 
-function_call : ()
+function_call : (word "(" (expression ",")* expression? ")")
 
-let_statement : ()
+let_statement : "let" (exp_set_statement | typed_let)
 
-arithmetic : expression ("+" | "-" | "*" | "/" | "^") expression
+exp_set_statement : (atom_expression "=" expression)
 
-find_statement : ()
+typed_let : "typed" atom_expression "in" set_expression "=" expression
+
+arithmetic : expression operator expression?
+
+operator : "+" | "-" | "*" | "/" | "^" | "<" | "<=" | ">" | ">=" | "==" | "!=" | ".." // TODO: instanceof
+
+find_statement : ("find" atom_expression "=" expression ("where" (constant_set ",")* constant_set? )?)
+
+constant_set : atom_variable "=" expression
+
+if_block : if elif* else?
+
+if : "if" "[" expression "]" function_body
+
+elif : "elif" "[" expression "]" function_body
+
+else : "else" function_body
 
 // Expression time!
-expression : (set_declaration | function_declaration | typedef | function_call | let_statement | find_statement | arithmetic | raw_expression)
+expression : (atom_expression | atom_variable | atom_constant | set_declaration | if_block | function_declaration | typedef | function_call | let_statement | exp_set_statement | find_statement | arithmetic | raw_expression | "(" expression ")")
 
 // Compound Phrases
 
-if_block : ()
-
 // Finally, phrase
-phrase : (expression | if_block) ";"
+phrase : (expression) ";"
 
 // Start
 start : phrase*
