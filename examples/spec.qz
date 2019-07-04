@@ -1,6 +1,6 @@
-declare F : (R^2 -> R) [a, b] -> a + b
-print (map (declare anonymous : (R -> R) [a] -> a ^ 2, 1..))
-print (map (λ : (R -> R) [a] -> a ^ 2, 1..))
+declare F : (R^2 -> R) [a, b] -> a + b;
+print (map (declare anonymous : (R -> R) [a] -> a ^ 2, 1..));
+print (map (λ : (R -> R) [a] -> a ^ 2, 1..));
 // λ = declare anonymous
 
 a = 2; // SyntaxError, cannot set variable to value
