@@ -1,0 +1,7 @@
+%import common.CNAME
+%import common.ESCAPED_STRING
+%import common.FLOAT
+
+word : CNAME
+str : ESCAPED_STRING
+

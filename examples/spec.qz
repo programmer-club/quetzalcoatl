@@ -1,0 +1,27 @@
+declare F : (R^2 -> R) [a, b] -> a + b
+print (map (declare anonymous : (R -> R) [a] -> a ^ 2, 1..))
+print (map (λ : (R -> R) [a] -> a ^ 2, 1..))
+// λ = declare anonymous
+
+a = 2; // SyntaxError, cannot set variable to value
+let $a = 2; // Valid
+
+if [$a == 2] {
+    say $a;
+} else {
+    say 2;
+}
+
+// no pointers, but arrow notation anyway :)
+// let lets you declare typed variables
+let $x = 0;
+find $x = 0;
+// NoVariable
+
+// y in R
+// @a, @b, @c declares a, b, c as constants and not variables
+let typed $y in R = @a * x ^2 + @b * x + @c;
+find $y = 0;
+// UnsolvableException
+find $y = 0 where a = 0, b = 1, c = 0;
+// Solution { x: [0] }
