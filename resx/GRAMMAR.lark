@@ -1,7 +1,46 @@
 %import common.CNAME
 %import common.ESCAPED_STRING
 %import common.FLOAT
+%import common.NUMBER
 
 word : CNAME
 str : ESCAPED_STRING
 
+// Definitions of base atoms
+atom_variable : word
+atom_expression : "$" word
+atom_constant : "@" word
+atom_set : "#" word
+
+raw_expression : str | ("0" ("x" | "b") ?) ? NUMBER | FLOAT
+
+// Compound Expressions
+// TODO: allow expressions?
+set_expression : word ("<" (atom_set ",")* atom_set (",")? ">")?
+
+set_declaration : ()
+
+function_declaration : ()
+
+typedef : "typedef" set_expression "is" set_expression
+
+function_call : ()
+
+let_statement : ()
+
+arithmetic : expression ("+" | "-" | "*" | "/" | "^") expression
+
+find_statement : ()
+
+// Expression time!
+expression : (set_declaration | function_declaration | typedef | function_call | let_statement | find_statement | arithmetic | raw_expression)
+
+// Compound Phrases
+
+if_block : ()
+
+// Finally, phrase
+phrase : (expression | if_block) ";"
+
+// Start
+start : phrase*
