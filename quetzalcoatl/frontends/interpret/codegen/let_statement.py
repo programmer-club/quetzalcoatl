@@ -6,8 +6,8 @@ def parse(names, tree, par):  # TODO: let typed
     out = par(names, set_.children[1])
     names[
         set_.children[0].children[0].children[0]
-    ] = Name(Name.Type.EXPRESSION, out)
+    ] = Name(Name.Type.EXPRESSION, out[0])
 
     return (
-        out, names
+        out[0], names
     )

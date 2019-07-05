@@ -1,10 +1,11 @@
-//declare F : (R^2 -> R) [a, b] -> (a + b);
+//declare F : (R^2 -> R) [a, b] -> ($a + $b);
 //print (map (declare anonymous : (R -> R) [a] -> a ^ 2, 1 .. infinity));
 //print (map (λ : (R -> R) [a] -> a ^ 2, 1 .. infinity));
 // λ = declare anonymous
 
 // a = 2; // SyntaxError, cannot set variable to value
 let $a = 2; // Valid
+let $b = (2 * x);
 
 if [ $a == 2 ] {
     print ($a);
@@ -16,16 +17,22 @@ if [ $a == 2 ] {
 
 // no pointers, but arrow notation anyway :)
 // let lets you declare typed variables
-let $x = 0;
-find $x = 0;
+let $x = ((3 * (x ^ 2)) + (2 * x) - 3);
+print(find $x = 0 for x);
 // NoVariable
+
+// also supports imaginary!
+let $im = (x^2);
+// negative numbers do not currently work :(
+// hence 0 - 1
+print(find $im = (0 - 1) for x);
 
 // y in R
 // @a, @b, @c declares a, b, c as constants and not variables
 let typed $y in R = @a * x ^2 + @b * x + @c;
-find $y = 0;
+find $y = 0 for x;
 // UnsolvableException
-find $y = 0 where a = 0, b = 1, c = 0;
+find $y = 0 where a = 0, b = 1, c = 0 for x;
 // Solution { x: [0] }
 
 // no types, only sets
@@ -91,8 +98,8 @@ metaset Tuple <#a, #b> in (#(U), #(U)) { // native implementation of Tuple
         ;
 
     make Tuple (#a x #b -> Tuple<#a, #b>) [a, b] {
-        x->$a = a;
-        x->$b = b;
+        x->$a = $a;
+        x->$b = $b;
 
         x;
     };

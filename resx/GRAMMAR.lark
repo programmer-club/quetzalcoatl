@@ -80,11 +80,10 @@ typed_let : "typed" atom_expression "in" set_expression "=" expression
 arithmetic : expression operator expression
 
 !operator : "+" | "-" | "*" | "/" | "^" | "<" | "<=" | ">" | ">=" | "==" | "!=" | ".." // TODO: instanceof
-!operator_noslash : "+" | "-" | "*" | "^" | "<" | "<=" | ">" | ">=" | "==" | "!=" | ".."
 
-unary_op : operator_noslash expression
+?unary_op : "-" expression
 
-find_statement : ("find" atom_expression "=" expression ("where" (constant_set ",")* constant_set? )?)
+find_statement : ("find" atom_expression "=" expression ("where" (constant_set ",")* constant_set? )? "for" (atom_variable ",")* atom_variable)
 
 constant_set : atom_variable "=" expression
 

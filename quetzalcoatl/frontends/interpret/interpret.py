@@ -2,7 +2,9 @@ import math
 import typing
 
 import lark
+import sympy
 
+from quetzalcoatl.data.expression import Expression
 from quetzalcoatl.data.name import Name
 from quetzalcoatl.frontends.interpret.codegen import arithmetic
 from quetzalcoatl.frontends.interpret.codegen import exp_set_statement
@@ -27,6 +29,7 @@ static_names = {
     'e': Name(Name.Type.EXPRESSION, math.e),
     'τ': Name(Name.Type.EXPRESSION, math.tau),
     'i': Name(Name.Type.EXPRESSION, 1j),
+    'print': Name(Name.Type.FUNCTION, print),  # TODO: map
 }
 
 
@@ -49,27 +52,34 @@ def return_word(names: typing.Mapping[str, Name], tree: lark.Tree, par):
     )
 
 
+def return_named_var(names: typing.Mapping[str, Name], tree: lark.Tree, par):
+    return (
+        sympy.Symbol(tree.children[0].children[0]),
+        names
+    )
+
+
 register("phrase", do_nothing)
 register("expression", do_nothing)
 register("atom_expression", return_word)
-register("atom_variable", return_word)
+register("atom_variable", return_named_var)
 register("atom_constant", return_word)
 register("atom_set", return_word)
+register("local_var", return_word)
 
 register("make_expression", make_expression.parse)
-register("unary_op", unary_op.parse)
+register("unary_op", unary_op.parse)  #
 register("show_phrase", show_phrase.parse)
-register("local_var", return_word)
 register("make_phrase", make_phrase.parse)
 register("set_declaration", set_declaration.parse)
-register("if_block", if_block.parse)
+register("if_block", if_block.parse)  #
 register("function_declaration", function_declaration.parse)
-register("typedef", typedef.parse)
+register("typedef", typedef.parse)  #
 register("function_call", function_call.parse)
-register("let_statement", let_statement.parse)
-register("exp_set_statement", exp_set_statement.parse)
+register("let_statement", let_statement.parse)  #
+register("exp_set_statement", exp_set_statement.parse)  #
 register("find_statement", find_statement.parse)
-register("arithmetic", arithmetic.parse)
+register("arithmetic", arithmetic.parse)  #
 register("raw_expression", raw_expression.parse)
 register("set_expression", set_expression.parse)
 
