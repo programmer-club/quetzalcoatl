@@ -7,5 +7,5 @@ with open(GRAMMAR_FILE) as file:
     lark_parser = lark.lark.Lark(file.read(), propagate_positions=True)
 
 
-def parse(text: str):
-    print(lark_parser.parse(text).pretty())
+def parse(text: str) -> lark.tree.Tree:
+    return lark_parser.parse(text)

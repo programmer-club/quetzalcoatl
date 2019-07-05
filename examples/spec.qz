@@ -1,4 +1,4 @@
-declare F : (R^2 -> R) [a, b] -> a + b;
+declare F : (R^2 -> R) [a, b] -> (a + b);
 print (map (declare anonymous : (R -> R) [a] -> a ^ 2, 1 .. infinity));
 print (map (λ : (R -> R) [a] -> a ^ 2, 1 .. infinity));
 // λ = declare anonymous
