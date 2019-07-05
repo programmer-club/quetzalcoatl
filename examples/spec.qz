@@ -6,11 +6,11 @@ print (map (λ : (R -> R) [a] -> a ^ 2, 1 .. infinity));
 // a = 2; // SyntaxError, cannot set variable to value
 let $a = 2; // Valid
 
-//if [ $a == 2 ] {
-//    print ($a);
-//} else {
-//    print (2);
-//}
+if [ $a == 2 ] {
+    print ($a);
+} else {
+    print (2);
+};
 
 // no pointers, but arrow notation anyway :)
 // let lets you declare typed variables
