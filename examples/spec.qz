@@ -1,6 +1,6 @@
 declare F : (R^2 -> R) [a, b] -> a + b;
-print (map (declare anonymous : (R -> R) [a] -> a ^ 2, 1 ..));
-print (map (λ : (R -> R) [a] -> a ^ 2, 1 ..));
+print (map (declare anonymous : (R -> R) [a] -> a ^ 2, 1 .. infinity));
+print (map (λ : (R -> R) [a] -> a ^ 2, 1 .. infinity));
 // λ = declare anonymous
 
 // a = 2; // SyntaxError, cannot set variable to value
@@ -38,10 +38,10 @@ set S { // native implementation of Tuple
         ;
 
     make S (R^2 -> S) [a, b] {
-        x->a = a;
-        x->b = b;
+        x->$a = a;
+        x->$b = b;
 
-        x
+        x;
     }
 
     show + in (S^2 -> S) [x, y] = make S [x.a + y.a, x.b + y.b];
@@ -89,8 +89,8 @@ metaset Tuple <#a, #b> in (#(U), #(U)) { // native implementation of Tuple
         ;
 
     make Tuple (#a x #b -> Tuple<#a, #b>) [a, b] {
-        x->a = a;
-        x->b = b;
+        x->$a = a;
+        x->$b = b;
 
         x;
     }
