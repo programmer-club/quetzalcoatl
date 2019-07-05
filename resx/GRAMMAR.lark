@@ -11,7 +11,8 @@ COMMENT : /\/\/.+?\n/
 
 %ignore WS
 
-word : CNAME | "α" .. "ω" | "Α" .. "Ω"
+WORD : ("a" .. "z" | "A" .. "Z" | "α" .. "ω" | "Α" .. "Ω")+
+word : WORD
 str : ESCAPED_STRING
 
 // Definitions of base atoms
@@ -78,7 +79,7 @@ typed_let : "typed" atom_expression "in" set_expression "=" expression
 
 arithmetic : expression operator expression
 
-operator : "+" | "-" | "*" | "/" | "^" | "<" | "<=" | ">" | ">=" | "==" | "!=" | ".." // TODO: instanceof
+!operator : "+" | "-" | "*" | "/" | "^" | "<" | "<=" | ">" | ">=" | "==" | "!=" | ".." // TODO: instanceof
 
 unary_op : operator expression
 
