@@ -11,7 +11,7 @@ COMMENT : /\/\/.+?\n/
 
 %ignore WS
 
-word : CNAME
+word : CNAME | "α" .. "ω" | "Α" .. "Ω"
 str : ESCAPED_STRING
 
 // Definitions of base atoms
@@ -24,7 +24,7 @@ raw_expression : str | ("0" ("x" | "b") ?) ? NUMBER | FLOAT
 
 // Compound Expressions
 // TODO: allow expressions?
-set_expression : (word ("<" (atom_set ",")* atom_set (",")? ">")? ("^" NUMBER)? ("->" set_expression)? ("|" set_expression)? ("x" set_expression)?) | "#" "(" set_expression ")"
+set_expression : ((word | ("#" "(" set_expression ")") | atom_set) ("<" ((set_expression | expression) ",")* (set_expression | expression)? ">")? ("^" NUMBER)? ("->" set_expression)? ("|" set_expression)? ("x" set_expression)?)
 
 set_declaration : set_body | metaset_body
 
@@ -35,7 +35,9 @@ asterix_set_body : properties ";" phrase*
 
 properties : word "|" (has ",")* has?
 
-has : is_made_in | has_property | has_operator
+has : is_made_in | has_property | has_operator | is_true
+
+is_true : expression "is" expression
 
 is_made_in : word "is" "made" "in" set_mapping_specifier // x is made in (#a x #b -> Tuple<#a, #b>)
 
@@ -50,7 +52,7 @@ make_phrase : "make" word set_mapping_specifier "[" (word ",")* word? "]" functi
 
 inheritance : "<=" set_expression
 
-metaset_body : "metaset" word "<" (atom_set ",")* atom_set? ">" "in" "(" (set_expression ",")* set_expression? ")" inheritance?
+metaset_body : "metaset" word "<" ((atom_set | atom_expression) ",")* (atom_set | atom_expression)? ">" "in" "(" (set_expression ",")* set_expression? ")" inheritance? "{" asterix_set_body "}"
 
 function_declaration : ((("declare" word) | "λ") ":" set_mapping_specifier "[" (word ",")* word? "]" "->" function_body)
 
@@ -60,7 +62,9 @@ function_body : expression | ("{" phrase* "}")
 
 function_with_locals_body : expression | ("{" (phrase | (local_set ";"))* "}")
 
-local_set : word "->" atom_expression "=" expression
+local_set : local_var "=" expression
+
+local_var : word "->" atom_expression
 
 typedef : "typedef" set_expression "is" set_expression
 
@@ -75,6 +79,8 @@ typed_let : "typed" atom_expression "in" set_expression "=" expression
 arithmetic : expression operator expression
 
 operator : "+" | "-" | "*" | "/" | "^" | "<" | "<=" | ">" | ">=" | "==" | "!=" | ".." // TODO: instanceof
+
+unary_op : operator expression
 
 find_statement : ("find" atom_expression "=" expression ("where" (constant_set ",")* constant_set? )?)
 
@@ -91,7 +97,7 @@ else : "else" function_body
 make_expression : "make" set_expression "[" (expression ",")* expression? "]"
 
 // Expression time!
-expression : (atom_expression | atom_variable | atom_constant | make_expression | show_phrase | make_phrase | set_declaration | if_block | function_declaration | typedef | function_call | let_statement | exp_set_statement | find_statement | arithmetic | raw_expression | "(" expression ")")
+expression : (atom_expression | atom_variable | atom_constant | make_expression | unary_op | show_phrase | local_var | make_phrase | set_declaration | if_block | function_declaration | typedef | function_call | let_statement | exp_set_statement | find_statement | arithmetic | raw_expression | "(" expression ")")
 
 // Compound Phrases
 

@@ -8,4 +8,4 @@ with open(GRAMMAR_FILE) as file:
 
 
 def parse(text: str):
-    print(lark_parser.parse(text))
+    print(lark_parser.parse(text).pretty())

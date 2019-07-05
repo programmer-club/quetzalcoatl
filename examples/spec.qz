@@ -42,21 +42,21 @@ set S { // native implementation of Tuple
         x->$b = b;
 
         x;
-    }
+    };
 
-    show + in (S^2 -> S) [x, y] = make S [x.a + y.a, x.b + y.b];
-    show - in (S^2 -> S) [x, y] = make S [x.a - y.a, x.b - y.b];
-    show * in (S^2 -> S) [x, y] = make S [x.a * y.a, x.b * y.b];
-    show / in (S^2 -> S) [x, y] = make S [x.a / y.a, x.b / y.b];
-    show + in (S x R -> S) [x, y] = make S [x.a + y, x.b + y];
-    show - in (S x R -> S) [x, y] = make S [x.a - y, x.b - y];
-    show * in (S x R -> S) [x, y] = make S [x.a * y, x.b * y];
-    show / in (S x R -> S) [x, y] = make S [x.a / y, x.b / y];
-}
+    show + in (S^2 -> S) [x, y] = make S [x->$a + y->$a, x->$b + y->$b];
+    show - in (S^2 -> S) [x, y] = make S [x->$a - y->$a, x->$b - y->$b];
+    show * in (S^2 -> S) [x, y] = make S [x->$a * y->$a, x->$b * y->$b];
+    show / in (S^2 -> S) [x, y] = make S [x->$a / y->$a, x->$b / y->$b];
+    show + in (S x R -> S) [x, y] = make S [x->$a + y, x->$b + y];
+    show - in (S x R -> S) [x, y] = make S [x->$a - y, x->$b - y];
+    show * in (S x R -> S) [x, y] = make S [x->$a * y, x->$b * y];
+    show / in (S x R -> S) [x, y] = make S [x->$a / y, x->$b / y];
+};
 
 set UnitCircle <= S { // UnitCircle
-    x | x.a ^ 2 + x.b ^ 2 is 1;
-}
+    x | x->$a ^ 2 + x->$b ^ 2 is 1;
+};
 
 // metaset is a set of sets (i.e. generic type)
 // #set is a Set parametre (i.e. generic type variable)
@@ -65,14 +65,14 @@ set UnitCircle <= S { // UnitCircle
 //                                           but x in U | x is a Set =/= U
 // <= #set is dynamic inheritance (i.e. Bounded<R, ...> <= R);
 metaset BoundedB <#set, $lower, $upper> in (#(U), U, U) <= #set {
-    x | $lower < x,
-        $upper >= x;
-}
+    x | $lower < x is 1,
+        $upper >= x is 1;
+};
 
 metaset BoundedA <#set, $lower, $upper> in (#(U), U, U) <= #set {
-    x | $lower <= x,
-        $upper > x;
-}
+    x | $lower <= x is 1,
+        $upper > x is 1;
+};
 
 // aliases
 typedef Radian is BoundedB<R, -π, π>;
@@ -93,10 +93,10 @@ metaset Tuple <#a, #b> in (#(U), #(U)) { // native implementation of Tuple
         x->$b = b;
 
         x;
-    }
+    };
 
-    show + in (Tuple<#a, #b>^2 -> Tuple<#a, #b>) [x, y] = make Tuple<#a, #b> [x.a + y.a, x.b + y.b];
-    show - in (Tuple<#a, #b>^2 -> Tuple<#a, #b>) [x, y] = make Tuple<#a, #b> [x.a - y.a, x.b - y.b];
-    show * in (Tuple<#a, #b>^2 -> Tuple<#a, #b>) [x, y] = make Tuple<#a, #b> [x.a * y.a, x.b * y.b];
-    show / in (Tuple<#a, #b>^2 -> Tuple<#a, #b>) [x, y] = make Tuple<#a, #b> [x.a / y.a, x.b / y.b];
-}
+    show + in (Tuple<#a, #b>^2 -> Tuple<#a, #b>) [x, y] = make Tuple<#a, #b> [x->$a + y->$a, x->$b + y->$b];
+    show - in (Tuple<#a, #b>^2 -> Tuple<#a, #b>) [x, y] = make Tuple<#a, #b> [x->$a - y->$a, x->$b - y->$b];
+    show * in (Tuple<#a, #b>^2 -> Tuple<#a, #b>) [x, y] = make Tuple<#a, #b> [x->$a * y->$a, x->$b * y->$b];
+    show / in (Tuple<#a, #b>^2 -> Tuple<#a, #b>) [x, y] = make Tuple<#a, #b> [x->$a / y->$a, x->$b / y->$b];
+};
