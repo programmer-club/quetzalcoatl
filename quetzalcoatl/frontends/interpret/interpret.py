@@ -16,6 +16,7 @@ from quetzalcoatl.frontends.interpret.codegen import make_expression
 from quetzalcoatl.frontends.interpret.codegen import make_phrase
 from quetzalcoatl.frontends.interpret.codegen import raw_expression
 from quetzalcoatl.frontends.interpret.codegen import set_declaration
+from quetzalcoatl.frontends.interpret.codegen import set_expression
 from quetzalcoatl.frontends.interpret.codegen import show_phrase
 from quetzalcoatl.frontends.interpret.codegen import typedef
 from quetzalcoatl.frontends.interpret.codegen import unary_op
@@ -43,7 +44,7 @@ do_nothing = lambda names, tree, par: par(names, tree.children[0])
 
 def return_word(names: typing.Mapping[str, Name], tree: lark.Tree, par):
     return (
-        names[tree.children[0].children[0]],
+        names[tree.children[0].children[0]].val,
         names
     )
 
@@ -58,7 +59,7 @@ register("atom_set", return_word)
 register("make_expression", make_expression.parse)
 register("unary_op", unary_op.parse)
 register("show_phrase", show_phrase.parse)
-register("local_var", local_var.parse)
+register("local_var", return_word)
 register("make_phrase", make_phrase.parse)
 register("set_declaration", set_declaration.parse)
 register("if_block", if_block.parse)
@@ -70,6 +71,7 @@ register("exp_set_statement", exp_set_statement.parse)
 register("find_statement", find_statement.parse)
 register("arithmetic", arithmetic.parse)
 register("raw_expression", raw_expression.parse)
+register("set_expression", set_expression.parse)
 
 
 def interpret(tree: lark.Tree):
