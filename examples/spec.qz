@@ -27,6 +27,12 @@ let $im = (x^2);
 // hence 0 - 1
 print(find $im = (0 - 1) for x);
 
+print(d(x^2));
+
+print(Integral(x^2, make_tuple(x, 0, 10)));
+
+print (find (∫ ((x ^ 2) + x, x)) = 0 for x);
+
 // y in R
 // @a, @b, @c declares a, b, c as constants and not variables
 let typed $y in R = @a * x ^2 + @b * x + @c;

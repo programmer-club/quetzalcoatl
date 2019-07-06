@@ -3,6 +3,7 @@ import typing
 
 import lark
 import sympy
+from sympy import *
 
 from quetzalcoatl.data.expression import Expression
 from quetzalcoatl.data.name import Name
@@ -23,14 +24,28 @@ from quetzalcoatl.frontends.interpret.codegen import show_phrase
 from quetzalcoatl.frontends.interpret.codegen import typedef
 from quetzalcoatl.frontends.interpret.codegen import unary_op
 
+init_printing()
+
 REGISTRY = {}
 static_names = {
     'π': Name(Name.Type.EXPRESSION, math.pi),
     'e': Name(Name.Type.EXPRESSION, math.e),
     'τ': Name(Name.Type.EXPRESSION, math.tau),
     'i': Name(Name.Type.EXPRESSION, 1j),
-    'print': Name(Name.Type.FUNCTION, print),  # TODO: map
+    'print': Name(Name.Type.FUNCTION, pprint),  # TODO: map,
+    # 'integrate': Name(Name.Type.FUNCTION, sympy.integrate),
+    '∫': Name(Name.Type.FUNCTION, sympy.integrate),
+    'd': Name(Name.Type.FUNCTION, lambda x, *args: x.diff(*args)),
+    '∂': Name(Name.Type.FUNCTION, lambda x, *args: diff(x, *args)),
+    'make_tuple': Name(Name.Type.FUNCTION, lambda *x: tuple(x))  # EVIL HACK
+    # 'exp': exp,
 }
+
+for i in dir(sympy):
+    # print(i)
+    val = getattr(sympy, i)
+    if callable(val):
+        static_names[i] = Name(Name.Type.FUNCTION, val)
 
 
 def register(key, value):

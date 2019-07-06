@@ -1,9 +1,13 @@
 def parse(names, tree, par):
-    # TODO: make this not an evil haxxor move
-    right, names = par(names, tree.children[1])
+    right = []
+    if len(tree.children) > 1:
+        for i in tree.children[1:]:
+            r, names = par(names, i)
+            right.append(r)
+
     return (
         names[tree.children[0].children[0]].val(
-            right
+            *right
         ),
         names
     )

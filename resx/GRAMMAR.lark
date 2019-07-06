@@ -11,7 +11,7 @@ COMMENT : /\/\/.+?\n/
 
 %ignore WS
 
-WORD : ("a" .. "z" | "A" .. "Z" | "α" .. "ω" | "Α" .. "Ω")+
+WORD : ("a" .. "z" | "A" .. "Z" | "α" .. "ω" | "Α" .. "Ω" | "_")+ | "∫" | "∂"  // TODO: something legit here
 word : WORD
 str : ESCAPED_STRING
 
@@ -81,9 +81,9 @@ arithmetic : expression operator expression
 
 !operator : "+" | "-" | "*" | "/" | "^" | "<" | "<=" | ">" | ">=" | "==" | "!=" | ".." // TODO: instanceof
 
-?unary_op : "-" expression
+?unary_op.2 : "-" expression
 
-find_statement : ("find" atom_expression "=" expression ("where" (constant_set ",")* constant_set? )? "for" (atom_variable ",")* atom_variable)
+find_statement : ("find" expression "=" expression ("where" (constant_set ",")* constant_set? )? "for" (atom_variable ",")* atom_variable)
 
 constant_set : atom_variable "=" expression
 
