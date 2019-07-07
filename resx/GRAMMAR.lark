@@ -46,7 +46,7 @@ has_property : word "has" "property" word "in" set_expression // x has property 
 
 has_operator : word "has" "operator" operator "in" set_mapping_specifier // x has operator + in (Tuple<#a, #b> ^ 2 -> Tuple<#a, #b>)
 
-show_phrase : "show" operator "in" set_mapping_specifier "[" (word ",")* word? "]" "=" function_body
+show_phrase : "show" operator "in" set_mapping_specifier "[" (word ",")* word? "]" "=" block
 // show + in (Tuple<#a, #b>^2 -> Tuple<#a, #b>) [x, y] = make Tuple<#a, #b> [x.a + y.a, x.b + y.b]
 
 make_phrase : "make" word set_mapping_specifier "[" (word ",")* word? "]" function_with_locals_body
@@ -55,11 +55,14 @@ inheritance : "<=" set_expression
 
 metaset_body : "metaset" word "<" ((atom_set | atom_expression) ",")* (atom_set | atom_expression)? ">" "in" "(" (set_expression ",")* set_expression? ")" inheritance? "{" asterix_set_body "}"
 
-function_declaration : ((("declare" word) | "λ") ":" set_mapping_specifier "[" (word ",")* word? "]" "->" function_body)
+function_declaration : ((("declare" word) | "λ") ":" set_mapping_specifier "[" args "]" "->" function_body)
+
+args : (word ",")* word?
 
 set_mapping_specifier : ("(" set_expression "->" set_expression ")")
 
-function_body : expression | ("{" phrase* "}")
+function_body : expression // | ("{" phrase* "}")
+block : expression | ("{" phrase* "}")
 
 function_with_locals_body : expression | ("{" (phrase | (local_set ";"))* "}")
 
@@ -89,11 +92,11 @@ constant_set : atom_variable "=" expression
 
 if_block : if elif* else?
 
-if : "if" "[" expression "]" function_body
+if : "if" "[" expression "]" block
 
-elif : "elif" "[" expression "]" function_body
+elif : "elif" "[" expression "]" block
 
-else : "else" function_body
+else : "else" block
 
 make_expression : "make" set_expression "[" (expression ",")* expression? "]"
 

@@ -75,6 +75,8 @@ def return_named_var(names: typing.Mapping[str, Name], tree: lark.Tree, par):
 
 
 register("phrase", do_nothing)
+# TODO: block
+register("function_body", do_nothing)
 register("expression", do_nothing)
 register("atom_expression", return_word)
 register("atom_variable", return_named_var)
